@@ -1,0 +1,59 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+int top = -1;
+
+typedef struct {
+	int row;
+	int col;
+	int dir;
+}element;
+
+int move(int num, element position) {
+	switch (num)
+	{
+	case 0:
+		if (position.col + 1 != END) {
+			position.col++;
+		}
+		break;
+	case 1:
+		if (position.row + 1 != END) {
+			position.row++;
+		}
+		break;
+	case 2:
+		if (position.col - 1 != END) {
+			position.col--;
+		}
+		break;
+	case 3:
+		if (position.row - 1 != END) {
+			position.row--;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void push(element* stack,element position) {
+	top++;
+	stack[top].col = position.col;
+	stack[top].row = position.row;
+	stack[top].dir = position.dir;
+}
+
+void pop() {
+
+}
+
+void path(void) {
+	int i, row, col, nextRow, nextCol, dir, found = FALSE;
+	element position;
+}
+
+int main(void) {
+
+}
