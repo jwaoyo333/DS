@@ -1,0 +1,121 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+typedef enum{lparen=0,rparen,plus,minus,times,divide,mod,eos,lg,rg,and,or,operand}precedence;
+static int isp[] = {0,19,12,12,13,13,13,0,10,10,8,6};
+static int icp[] = {20,19,12,12,13,13,13,0,10,10,8,6};
+
+precedence stack[100];
+
+char expr[100];
+char symbol;
+
+int n = 0;
+int top = 0;
+
+precedence push(precedence token) {
+	stack[++top] = token;
+	return;
+}
+precedence pop() {
+	precedence tmp = 0;
+	tmp = stack[--top];
+	return tmp;
+}
+
+precedence get_token() {
+	symbol = expr[n++];
+
+	switch (symbol) {
+	case'(':
+		return lparen;
+	case')':
+		return rparen;
+	case'+':return plus;
+	case'-':return minus;
+	case'/':return divide;
+	case'*':return times;
+	case'%':return mod;
+	case'\n':return eos;
+	case'<':return lg;
+	case'>':return rg;
+	case'&':return and;
+	case'|':return or;
+	default:return operand;
+	}
+}
+
+void print_token(precedence token) {
+	switch (token) {
+	case lparen:
+		break;
+	case rparen:
+		break;
+	case plus:printf("+");
+		break;
+	case minus:printf("-");
+		break;
+	case divide:printf("/");
+		break;
+	case times: printf("*");
+		break;
+	case mod:printf("\%");
+		break;
+	case eos: break;
+	case lg: printf("<");
+		break;
+	case rg: printf(">");
+		break;
+	case and : printf("&");
+		break;
+	case or : printf("|");
+		break;
+	}
+
+	return;
+}
+
+int main() {
+	precedence token = 0;
+	int number = 0;
+
+	FILE* fp = fopen("infix.txt", "r");
+
+	fscanf(fp, "%d", &number);
+	fgetc(fp);
+	for (int i = 0; i < number; i++) {
+		token = 12;
+		stack[0] = eos;
+		n = 0;
+		top = 0;
+
+		fgets(expr, 100, fp);
+		printf("infix:\t%s\n", expr);
+
+		while (token != eos) {
+			token = get_token();
+			if (token == operand) {
+				printf("%c", symbol);
+			}
+			else if (token == rparen) {
+				while (stack[top] != lparen) {
+					print_token(pop());
+				}
+				pop();
+			}
+			else {
+				if(icp[token] <= isp[stack[top]]) {
+					print_token(pop());
+					push(token);
+				}
+			}
+		}
+
+		printf("\n");
+
+		
+	}
+
+	fclose(fp);
+	return 0;
+}
