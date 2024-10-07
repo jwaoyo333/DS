@@ -1,28 +1,27 @@
-//2022428313 ¿ìÁ¤ÁÖ
+//2022428313 ìš°ì •ì£¼
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 
 typedef enum {
 	lparen, rparen, plus, minus, times, divide, mod, eos, lg, rg, and, or , operand
-}
-precedence; // ¿­°ÅÇü º¯¼ö ¼±¾ğ
+}precedence; // ì—´ê±°í˜• ë³€ìˆ˜ ì„ ì–¸
 int stack[100];
 char expr[100];
 char symbol;
 int n = 0;
 int top = 0;
 
-void push(int token) { // tokenÀ» ¹Ş¾Æ stack¿¡ Ãß°¡ÇÏ´Â ÇÔ¼ö
+void push(int token) { // tokenì„ ë°›ì•„ stackì— ì¶”ê°€í•˜ëŠ” í•¨ìˆ˜
 	stack[++top] = token;
 	return;
 }
 
 int pop() {
-	return stack[top--]; // stack¿¡¼­ precedence Å¸ÀÔÀÇ tokenÀ» Ãâ·ÂÇÏ´Â ÇÔ¼ö
+	return stack[top--]; // stackì—ì„œ precedence íƒ€ì…ì˜ tokenì„ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
 }
 
-precedence get_token() { // expr¿¡¼­ charÀ» ¹Ş¾Æ ±ÔÄ¢¿¡ ¸ÂÃß¾î º¯È¯ÇÏ´Â ÇÔ¼ö
+precedence get_token() { // exprì—ì„œ charì„ ë°›ì•„ ê·œì¹™ì— ë§ì¶”ì–´ ë³€í™˜í•˜ëŠ” í•¨ìˆ˜
 	symbol = expr[n++];
 	switch (symbol) {
 	case'(':return lparen;
@@ -41,21 +40,32 @@ precedence get_token() { // expr¿¡¼­ charÀ» ¹Ş¾Æ ±ÔÄ¢¿¡ ¸ÂÃß¾î º¯È¯ÇÏ´Â ÇÔ¼ö
 	}
 }
 
-void operation(precedence token, int fir, int sec) { //precedence¸¦ ¿­°ÅÇüÀÇ ±ÔÄ¢¿¡ µû¶ó Ãâ·ÂÇÏ´Â ÇÔ¼ö
+int operation(precedence token, int fir, int sec) { //precedenceë¥¼ ì—´ê±°í˜•ì˜ ê·œì¹™ì— ë”°ë¼ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜
+	int tmp = 0;
 	switch (token) {
 	case lparen:
 		break;
 	case rparen:
 		break;
 	case plus:printf("+");
+	    tmp = fir+sec;
+	    return tmp;
 		break;
 	case minus:printf("-");
+	    tmp = fir-sec;
+	    return tmp;
 		break;
 	case divide:printf("/");
+	    tmp = fir/sec;
+	    return tmp;
 		break;
 	case times: printf("*");
+	    tmp = fir*sec;
+	    return tmp;
 		break;
 	case mod:printf("%%");
+	    tmp = fir%sec;
+	    return tmp;
 		break;
 	case eos: break;
 	case lg: printf("<");
@@ -74,43 +84,30 @@ int main() {
 	precedence token = 0;
 	int sec, fir;
 	int number = 0;
-
-
-	for (int i = 0; i < number; i++) {
-		token = eos;
-		stack[0] = eos;
-		n = 0;
-		top = 0; // Àü¿ª º¯¼ö·Î ¼±¾ğÇß±â ¶§¹®¿¡ ½ÃÀÛ Àü ÃÊ±âÈ­ ÇØÁà¾ßÇÔ.
-
-		fgets(expr, 100, fp); // ¶óÀÎ ´ÜÀ§·Î ±Ü¾î¿È
-		for (int i = 0; i < 100; i++) {
-			if (expr[i] == '\n') {
-				expr[i] = '\0';
-				break;
-			} // fgets·Î ¹Ş¾Æ¿Â ÁÙ¹Ù²Ş ¿¬»êÀÚ¸¦ NULL ¿¬»êÀÚ·Î º¯°æ Ã³¸®
-		}
-		printf("infix:\t%s\n", expr);
-		printf("postfix : ");
-
-		while ((token = get_token()) != eos) { // tokenÀ» ¹Ş¾Æ eos°¡ ¾Æ´Ñ ÇÑ ¹İº¹ÇÏ´Â Á¶°Ç
-			if (token == operand) {
-				
-			}
-			else if (token = ) {
-
-			}
-			else {
-				sec = pop();
-				fir = pop();
-				push(fir);
-			}
-		}
-		while (top > 0) {
-			print_token(pop()); // eos ÀÌÈÄ·Î´Â ³²¾ÆÀÖ´Â °Å ¸ğµÎ Ãâ·Â
-		}
-		printf("\n\n");
-	}
-
-	fclose(fp);
+	int tmp = 0;
+    for(int j = 0 ; j<3 ; j++){
+        scanf("%s", expr);
+        printf("postfix expression : %s", expr);
+	    for (int i = 0; i < number; i++) {
+		    token = eos;
+		    stack[0] = eos;
+		    n = 0;
+		    top = 0; // ì „ì—­ ë³€ìˆ˜ë¡œ ì„ ì–¸í–ˆê¸° ë•Œë¬¸ì— ì‹œì‘ ì „ ì´ˆê¸°í™” í•´ì¤˜ì•¼í•¨.
+		    
+		    while ((token = get_token()) != eos) { // tokenì„ ë°›ì•„ eosê°€ ì•„ë‹Œ í•œ ë°˜ë³µí•˜ëŠ” ì¡°ê±´
+			    if (token == operand) {
+				    tmp = expr[n-1] - 48;
+				    push(tmp);
+			    }else {
+		    		sec = pop();
+			    	fir = pop();
+			    	tmp = operation(token, fir,sec);
+			    	push(tmp);
+			    }
+		    }
+		    printf("\n\n");
+	    }
+    }
+    
 	return 0;
 }
